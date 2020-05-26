@@ -1,6 +1,17 @@
+import os.path
+import zipfile
+
+
 # Generate text8 Train/Validation/Test Datasets
 def generate_text8(train_split=0.7, valid_split=0.1, test_split=0.2, save_data=True):
     assert train_split + valid_split + test_split == 1
+
+    if not os.path.exists("text8/text8"):
+        if not os.path.exists("text8/text8.zip"):
+            return None, None, None
+
+        with zipfile.ZipFile("text8/text8.zip", 'r') as zip_ref:
+            zip_ref.extractall("text8")
 
     text8_raw = open("text8/text8", "r").read()
 
@@ -22,6 +33,8 @@ def generate_text8(train_split=0.7, valid_split=0.1, test_split=0.2, save_data=T
         valid_data = ''
     test_data = text8_raw[valid_end :]
 
+    # Print Train/Valid/Test Stats
+    print("\n")
     print("Train Size: {:,} characters.".format(len(train_data)))
     print("Validation Size: {:,} characters.".format(len(valid_data)))
     print("Test Size: {:,} characters.".format(len(test_data)))
